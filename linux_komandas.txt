@@ -1,0 +1,107 @@
+Linux navigācijas komandas:
+cd /home <-- ieiet sākuma direktorijā, bet tā nav root direktorija
+ls  <-- list files, kas ir atvērtajā direktorijā
+ls -al  <-- list hidden files
+
+
+
+Linux lietotāju komandas:  *************************************
+adduser  <-- izveido sistēmā jaunu lietotāja kontu
+cat /etc/passwd  <-- parādīs visus lietotāju kontus
+cat /etc/shadow  <-- fails, kurš glabā hašotās lietotāju paroles
+sudo passwd user1 <-- komanda izveido/nomaina paroli kontam user1
+usermod  <-- lietotāja konta modificēšana
+su - user2 <-- lietotāja konta pārslēgšana uz user2 kontu (switch user)
+sudo su -  <-- tas ieies root lietotāja kontā
+sudo visudo   <-- sudoers faila rediģēšana. Fails satur info par lietotājiem, kuriem ir sudo tiesības
+sudo userdel  <-- lietotāja konta dzēšanas komands
+sudo groupadd admingroup  <-- izveido lietotāju grupu ar nosaukumu admingroup
+cat /etc/group  <-- parādīs visas lietotāju grupas
+groups  <-- parādīs kādu grupu sastāvā ir lietotājs, kurš komandu izpilda
+Lai lietotāju grupai piešķirtu sudo tiesības:
+a) izveido grupu
+b) pievieno tai lietotājus
+c) sudo visudo 
+d) pie Allow members of group sudo to execute ...
+pievieno ierakstu: %admingroup ALL = NOPASSWD:ALL
+Tad var darīt visu bez paroles ievadīšanas.
+sudo usermod -aG admingroup user3  <-- komanda pievienos (-aG = append group) lietotāju user3 grupai admingroup
+sudo gpasswd -d user4 admingroup   <-- dzēsīs (-d = delete) lietotāju user4 no grupas admingroup
+sudo userdel user5  <-- no sistēmas tiks izdzēsts lietotājs user5
+sudo groupdel admingroup  <-- no sistēmas tiks dzēsta lietotāju grupa admingroup
+
+
+Programmu instalēšana: ******************************************
+dpkg un apk
+Instalēšana ar dpkg:
+1. lejuplādē instalācijas failu
+2. ar cd atver mapi, kurā instalācija lejuplādēta, piem.m, cd downloads
+3. dpkg -i discord_v1.deb  <-- dpkg komanda instalēs izpildāmo failu discord_v1.deb no Downloads mapes
+Bet problēmas var rasties ar to dependencies. Katra package ir atkarīga no citas pakas, ja to nav,
+instalēšana nenotiks.
+apt - advanced package tool
+Instalēšana ar apt:
+sudo apt update  <-- komanda vēršās pie instalācijas repozitorija un pieprasa ielādēt instalācijas sarakstu (list)
+sudo apt install mozilla  <-- izpildīs mozzilas instalēšanas procesu
+sudo apt edit-sources
+apt list --installed   <-- parādīs uzinstalētās programmas
+sudo apt show nmap   <-- komanda atgriezīs programmas nmap aprakstu
+sudo apt search nmap  <-- meklēs kaut ko par nmap
+sudo apt remove nmap  <-- atinstalēs programmu nmap, bet sistēmā paliks lietotāja konfigurācijas faili
+sudo apt purge nmap  <-- šis pilnībā atinstalēs un dzēsīs visu ar programmu saistīto info
+sudo apt upgrade  <-- atjauninās instalētās pakas
+sudo apt update && sudo apt upgrade  <-- šis ir pareizais atjaunināšanas veids
+sudo aptitude <-- apt on steroids, jeb DOS tipa interfeis ar instalācijām
+sudo apt install snapd  <-- instalēs kaut ko līdzīgu play veikalam
+sudo snap install --classic code  <-- tagad nevis apt bet snap instalēs lasisko versiju Visul Studio Code programmu
+un lai to programmu palaistu, izpilda vienkārši code
+Pip ir python package manager
+Git izmantošana, lai no githuba lejuplādētu skriptus vai programmas:
+1. sudo apt install git  <-- vispirms uzinstalē git (ja tas nav instalēts)
+2. git clone https://github/repozitorija_nosaukuma_adese
+3. ja no githuba instalētā paka ir python3 un tai ir vajadzīgas vēl kādas specifiskas pakas, tad
+izpilda: pip3 install -r requirements.txt  , kur requirements.txt ir teksta fails
+no github lejuplādētajā programmas mapē, kas satur informāciju par papildus pakām, kuras ir 
+vajadzīgas programmas darbināšanai, bet kuras varētu nebūt sistēmā vēl uzinstalētas.
+
+Servisi linuxā.*******************************
+ps -aux  <-- atgriezīs visus datorā noritošos procesus
+ps -aux | grep sublime  <-- tas palaisto procesu listē meklēs sublime
+Daemons are the processes we don`t start, ex. printing, network.
+Ja procesa nosaukumam galā ir d, tad tas šis serviss ir deamon process.
+Systemd ir master of deamons, master deamon.
+pstree  <-- proces tree  atvērs saistītu sarakstu ar procesu atkarībām
+systemctl  <-- tool to control deamons
+systemctl stop sshd  <- apturēs sistēmas procesu ssh
+sudo systemctl statussshd  <- atgriezīs sistēmas deamona-procesa statusu
+sudo systemctl start sshd  <- startēs ssh procesu
+systemctl restart sshd
+sudo systemctl disable ntp  <-- pārtrauks ntp procesa automātisku ielādi pie datora startēšanās.
+sudo systemctl is-active ntp  <-- vai šobrīd ntp process-deamons ir strādājošs
+sudo systemctl list-units  <-- units ir procesi, komanda atgriež listi ar aktīvajiem procesiem-daemoniem.
+sudo systemctl list-units --all <-- atgriezīs visus (aktīvos un neaktīvos) daemonus, kuri ir parsēti un ielādēti atmiņā.
+sudo systemctl list-unit-files | grep nginx <-- ir procesi, kuri standarta listē neparādās, tos var
+atrast ar šo komandu. Šajā gadījumā tiek meklēts vai darbojas nginx process.
+journalctl ir log sistēma sistēmas procesiem.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
